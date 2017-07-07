@@ -55,9 +55,11 @@ class Index extends \Ilch\Controller\Admin
         $mapper = new AnnouncementMapper();
 
         if($content != "")
+        {
             $mapper->createAnnouncement($content);
+            $this->redirectToIndex();
+        }
 
-        $this->redirectToIndex();
     }
 
     public function deleteAction()
@@ -68,7 +70,7 @@ class Index extends \Ilch\Controller\Admin
 
         $mapper->deleteAnnouncement($id);
 
-        $this->redirectToIndex();
+        $this->redirectToIndex("deleteSuccess");
     }
 
     public function activateAction()
@@ -98,15 +100,11 @@ class Index extends \Ilch\Controller\Admin
         $this->getView()->set('announcement', $mapper->getAnnouncementByID((int) $id));
     }
 
-    public function saveAction()
+    private function redirectToIndex($msg = "saveSuccess")
     {
 
-    }
-
-    private function redirectToIndex()
-    {
         $this->redirect()
-                    ->withMessage('saveSuccess')
+                    ->withMessage($msg)  //deleteSuccess | saveSuccess
                     ->to(['controller' => 'index', 'action' => 'index']);
     }
 }
